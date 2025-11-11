@@ -1,10 +1,9 @@
-package com.exercicioJPAFuncionario.controller;
+package com.empresa.rh.controller;
 
-import com.exercicioJPAFuncionario.entity.Departamento;
-import com.exercicioJPAFuncionario.service.DepartamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.Parameter;
+import com.empresa.rh.model.entity.Departamento;
+import com.empresa.rh.service.DepartamentoService;
 import java.util.List;
 
 @RestController
@@ -14,48 +13,28 @@ public class DepartamentoController {
     @Autowired
     private DepartamentoService departamentoService;
 
-    // Criar novo departamento
     @PostMapping
-    public Departamento createDepartamento(@RequestBody Departamento departamento) {
-        departamento.setId(null);
-        return departamentoService.salvar(departamento);
+    public Departamento criar(@RequestBody Departamento departamento) {
+        return departamentoService.criar(departamento);
     }
 
-    // Listar todos os departamentos
     @GetMapping
-    public List<Departamento> getAllDepartamentos() {
-        return departamentoService.listarTodos();
+    public List<Departamento> listar() {
+        return departamentoService.listar();
     }
 
-    // Buscar um departamento por ID
     @GetMapping("/{id}")
-    public Departamento getDepartamentoById(
-            @Parameter(description = "ID do departamento a ser buscado", required = true, example = "1")
-            @PathVariable("id") Long id) {
-        return departamentoService.buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Departamento não encontrado"));
+    public Departamento buscarPorId(@PathVariable Long id) {
+        return departamentoService.buscarPorId(id);
     }
 
-    // Atualizar departamento
     @PutMapping("/{id}")
-    public Departamento updateDepartamento(
-            @PathVariable("id") Long id,
-            @RequestBody Departamento departamentoDetails) {
-
-        Departamento departamento = departamentoService.buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Departamento não encontrado"));
-
-        departamento.setNome(departamentoDetails.getNome());
-        departamento.setDescricao(departamentoDetails.getDescricao());
-
-        return departamentoService.atualizar(departamento);
+    public Departamento atualizar(@PathVariable Long id, @RequestBody Departamento departamento) {
+        return departamentoService.atualizar(id, departamento);
     }
 
-    // Deletar departamento
     @DeleteMapping("/{id}")
-    public void deleteDepartamento(
-            @Parameter(description = "ID do departamento a ser excluído", required = true, example = "1")
-            @PathVariable("id") Long id) {
+    public void excluir(@PathVariable Long id) {
         departamentoService.excluir(id);
     }
 }
