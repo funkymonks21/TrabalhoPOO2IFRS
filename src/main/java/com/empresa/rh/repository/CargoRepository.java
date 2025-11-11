@@ -1,12 +1,10 @@
-package com.empresa.rh.repository;
+package com.empresa.rh.model.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import com.empresa.rh.model.entity.Cargo;
 
 @Repository
-public interface CargoRepository extends JpaRepository<Cargo,String>{
-
+public interface CargoRepository extends JpaRepository<Cargo, Long> {
+    boolean existsByNome(String nome);
 }
-
