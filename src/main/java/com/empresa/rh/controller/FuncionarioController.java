@@ -1,9 +1,10 @@
 package com.empresa.rh.controller;
 
+import com.empresa.rh.model.entity.Funcionario;
+import com.empresa.rh.model.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.empresa.rh.model.entity.Funcionario;
-import com.empresa.rh.service.FuncionarioService;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 
 @RestController
@@ -14,27 +15,33 @@ public class FuncionarioController {
     private FuncionarioService funcionarioService;
 
     @PostMapping
-    public Funcionario criar(@RequestBody Funcionario funcionario) {
+    public Funcionario criarFuncionario(@RequestBody Funcionario funcionario) {
         return funcionarioService.criar(funcionario);
     }
 
     @GetMapping
-    public List<Funcionario> listar() {
+    public List<Funcionario> listarFuncionarios() {
         return funcionarioService.listar();
     }
 
     @GetMapping("/{id}")
-    public Funcionario buscarPorId(@PathVariable Long id) {
+    public Funcionario buscarFuncionarioPorId(
+            @Parameter(description = "ID do funcionário", required = true, example = "1")
+            @PathVariable("id") Long id) {
         return funcionarioService.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public Funcionario atualizar(@PathVariable Long id, @RequestBody Funcionario funcionario) {
+    public Funcionario atualizarFuncionario(
+            @PathVariable("id") Long id,
+            @RequestBody Funcionario funcionario) {
         return funcionarioService.atualizar(id, funcionario);
     }
 
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Long id) {
+    public void excluirFuncionario(
+            @Parameter(description = "ID do funcionário", required = true, example = "1")
+            @PathVariable("id") Long id) {
         funcionarioService.excluir(id);
     }
 }
