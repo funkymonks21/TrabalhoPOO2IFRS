@@ -5,6 +5,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
@@ -19,7 +21,11 @@ public class Funcionario {
    @Temporal(TemporalType.DATE)
    private Calendar data_contratacao;
    private double salario;
+
+   @OneToOne
    private Cargo cargo;
+
+   @ManyToOne
    private Funcionario chefe;
     
    public Long getId() {
@@ -88,4 +94,3 @@ public class Funcionario {
 				"]";
    }	
 }
-
