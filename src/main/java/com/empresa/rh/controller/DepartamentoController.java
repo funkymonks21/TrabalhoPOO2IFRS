@@ -1,61 +1,61 @@
-package com.aprendendoJPAcomSpringBoot.controller;
+package com.exercicioJPAFuncionario.controller;
+
+import com.exercicioJPAFuncionario.entity.Departamento;
+import com.exercicioJPAFuncionario.service.DepartamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.aprendendoJPAcomSpringBoot.model.Tarefa;
-import com.aprendendoJPAcomSpringBoot.model.TarefaRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tarefas")
-public class TarefaController {
+@RequestMapping("/departamentos")
+public class DepartamentoController {
+
     @Autowired
-    private TarefaRepository tarefaRepository;
+    private DepartamentoService departamentoService;
 
-    // Método para criar nova tarefa
+    // Criar novo departamento
     @PostMapping
-    public Tarefa createTarefa(@RequestBody Tarefa tarefa) {
-    	tarefa.setId(null);
-    	System.out.println(tarefa.toString());
-        return tarefaRepository.save(tarefa);
+    public Departamento createDepartamento(@RequestBody Departamento departamento) {
+        departamento.setId(null);
+        return departamentoService.salvar(departamento);
     }
 
-    // Método para listar todos as tarefas
+    // Listar todos os departamentos
     @GetMapping
-    public List<Tarefa> getAllTarefas() {
-        return tarefaRepository.findAll();
+    public List<Departamento> getAllDepartamentos() {
+        return departamentoService.listarTodos();
     }
 
-    // Método para buscar um tarefa por ID
+    // Buscar um departamento por ID
     @GetMapping("/{id}")
-    public Tarefa getTarefaById(
-        @Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-        @PathVariable("id") Long id) {
-        return tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+    public Departamento getDepartamentoById(
+            @Parameter(description = "ID do departamento a ser buscado", required = true, example = "1")
+            @PathVariable("id") Long id) {
+        return departamentoService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Departamento não encontrado"));
     }
 
-    // Método para atualizar um produto
+    // Atualizar departamento
     @PutMapping("/{id}")
-    public Tarefa updateTarefa(
-    		@PathVariable("id") Long id,
-    		@Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-    		@RequestBody Tarefa tarefaDetails) {
-        Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrado"));
+    public Departamento updateDepartamento(
+            @PathVariable("id") Long id,
+            @RequestBody Departamento departamentoDetails) {
 
-        tarefa.setDescricao(tarefaDetails.getDescricao());
-        tarefa.setFinalizado(tarefaDetails.isFinalizado());
-        tarefa.setDataFinalizacao(tarefaDetails.getDataFinalizacao());
+        Departamento departamento = departamentoService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Departamento não encontrado"));
 
-        return tarefaRepository.save(tarefa);
+        departamento.setNome(departamentoDetails.getNome());
+        departamento.setDescricao(departamentoDetails.getDescricao());
+
+        return departamentoService.atualizar(departamento);
     }
 
-    // Método para deletar um produto
+    // Deletar departamento
     @DeleteMapping("/{id}")
-    public void deleteTarefa(
-    		@Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-    		@PathVariable("id") Long id)  {
-        tarefaRepository.deleteById(id);
+    public void deleteDepartamento(
+            @Parameter(description = "ID do departamento a ser excluído", required = true, example = "1")
+            @PathVariable("id") Long id) {
+        departamentoService.excluir(id);
     }
 }
