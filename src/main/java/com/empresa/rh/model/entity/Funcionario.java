@@ -1,96 +1,118 @@
 package com.empresa.rh.model.entity;
 
-import java.util.Calendar;
 import org.hibernate.annotations.DynamicUpdate;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @DynamicUpdate
 public class Funcionario {
-   @Id
-   @GeneratedValue
-   private Long id;
-   private String nome;
-   private String email;
-   @Temporal(TemporalType.DATE)
-   private Calendar data_contratacao;
-   private double salario;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   @OneToOne
-   private Cargo cargo;
+    private String nome;
 
-   @ManyToOne
-   private Funcionario chefe;
-    
-   public Long getId() {
-	   return id;
-   }
+    @Column(unique = true)
+    private String cpf;
 
-   public void setId(Long id) {
-	   this.id = id;
-   }
+    private String email;
+    private double salario;
+    private LocalDate data_admissao;
 
-   public String getNome() {
-	   return nome;
-   }
+    @OneToOne(fetch = FetchType.EAGER)
+    private Cargo cargo;
 
-   public void setNome(String nome) {
-	   this.nome = nome;
-   }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Funcionario chefe;
 
-   public String getEmail() {
-	   return email;
-   }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Departamento departamento;
 
-   public void setEmail(String email) {
-	   this.email = email;
-   }
+    public Long getId() {
+        return id;
+    }
 
-   public Calendar getData_contratacao() {
-	   return data_contratacao;
-   }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-   public void setData_contratacao(Calendar data_contratacao) {
-	   this.data_contratacao = data_contratacao;
-   }
+    public String getNome() {
+        return nome;
+    }
 
-   public double getSalario() {
-	   return salario;
-   }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-   public void setSalario(double salario) {
-	   this.salario = salario;
-   }
-   
-   public Cargo getCargo() {
-	   return cargo;
-   }
+    public String getCpf() {
+        return cpf;
+    }
 
-   public void setCargo(Cargo cargo) {
-	   this.cargo = cargo;
-   }
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 
-   public Funcionario getChefe() {
-	   return chefe;
-   }
+    public String getEmail() {
+        return email;
+    }
 
-   public void setChefe(Funcionario chefe) {
-	   this.chefe = chefe;
-   }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-   @Override
-   public String toString() {
-	   return 	"Funcionario [id = " + id +
-				", nome = " + nome +
-				", email = " + email +
-				", data_contratacao = " + data_contratacao +
-				", salario = " + salario +
-				"]";
-   }	
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
+    public LocalDate getData_admissao() {
+        return data_admissao;
+    }
+
+    public void setData_admissao(LocalDate data_admissao) {
+        this.data_admissao = data_admissao;
+    }
+
+    public Cargo getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(Cargo cargo) {
+        this.cargo = cargo;
+    }
+
+    public Funcionario getChefe() {
+        return chefe;
+    }
+
+    public void setChefe(Funcionario chefe) {
+        this.chefe = chefe;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+
+    @Override
+    public String toString() {
+        return 
+            "Funcionario [id = " + id +
+            ", Nome = " + nome +
+            ", CPF = " + cpf +
+            ", Email = " + email +
+            ", Salário = " + salario +
+            ", Data de admissão = " + data_admissao +
+            ", Cargo = " + (cargo != null ? cargo.getNome() : "N/A") +
+            ", Departamento = " + (departamento != null ? departamento.getNome() : "N/A") +
+            ", Chefe = " + (chefe != null ? chefe.getNome() : "N/A") +
+            "]";
+    }
 }
