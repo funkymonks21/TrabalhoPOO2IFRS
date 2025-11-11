@@ -1,7 +1,7 @@
 package com.empresa.rh.service;
 
-import java.util.Calendar;
-import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.empresa.rh.model.entity.Funcionario;
@@ -13,48 +13,30 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    public Funcionario criar(Funcionario funcionario) {
+    public Funcionario salvar(Funcionario funcionario) {
         validarFuncionario(funcionario);
-        funcionario.setId(null);
-
-        if (funcionarioRepository.existsByEmail(funcionario.getEmail())) {
-            throw new IllegalArgumentException("Já existe um funcionário cadastrado com este e-mail.");
-        }
-
         return funcionarioRepository.save(funcionario);
     }
 
-    public List<Funcionario> listar() {
-        return funcionarioRepository.findAll();
-    }
-
-    public Funcionario buscarPorId(Long id) {
-        return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado com ID: " + id));
-    }
-
     public Funcionario atualizar(Long id, Funcionario funcionarioAtualizado) {
-        Funcionario funcionarioExistente = buscarPorId(id);
+        Funcionario funcionarioExistente = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Funcionário não encontrado."));
+
+        funcionarioAtualizado.setId(funcionarioExistente.getId());
         validarFuncionario(funcionarioAtualizado);
-
-        if (!funcionarioExistente.getEmail().equalsIgnoreCase(funcionarioAtualizado.getEmail())
-                && funcionarioRepository.existsByEmail(funcionarioAtualizado.getEmail())) {
-            throw new IllegalArgumentException("Já existe outro funcionário com esse e-mail.");
-        }
-
-        funcionarioExistente.setNome(funcionarioAtualizado.getNome());
-        funcionarioExistente.setEmail(funcionarioAtualizado.getEmail());
-        funcionarioExistente.setData_contratacao(funcionarioAtualizado.getData_contratacao());
-        funcionarioExistente.setSalario(funcionarioAtualizado.getSalario());
-        funcionarioExistente.setCargo(funcionarioAtualizado.getCargo());
-        funcionarioExistente.setChefe(funcionarioAtualizado.getChefe());
-
-        return funcionarioRepository.save(funcionarioExistente);
+        return funcionarioRepository.save(funcionarioAtualizado);
     }
 
     public void excluir(Long id) {
-        Funcionario funcionario = buscarPorId(id);
-        funcionarioRepository.delete(funcionario);
+        funcionarioRepository.deleteById(id);
+    }
+
+    public Optional<Funcionario> buscarPorId(Long id) {
+        return funcionarioRepository.findById(id);
+    }
+
+    public Iterable<Funcionario> listarTodos() {
+        return funcionarioRepository.findAll();
     }
 
     private void validarFuncionario(Funcionario funcionario) {
@@ -62,26 +44,34 @@ public class FuncionarioService {
             throw new IllegalArgumentException("O nome do funcionário é obrigatório.");
         }
 
-        if (funcionario.getEmail() == null || funcionario.getEmail().isBlank()) {
-            throw new IllegalArgumentException("O e-mail do funcionário é obrigatório.");
+        if (funcionario.getEmail() == null || !emailValido(funcionario.getEmail())) {
+            throw new IllegalArgumentException("Email inválido.");
         }
 
         if (funcionario.getSalario() <= 0) {
-            throw new IllegalArgumentException("O salário deve ser um valor positivo.");
+            throw new IllegalArgumentException("O salário deve ser maior que zero.");
+        }
+
+        if (funcionario.getCargo() == null) {
+            throw new IllegalArgumentException("O cargo é obrigatório.");
         }
 
         if (funcionario.getData_contratacao() == null) {
             throw new IllegalArgumentException("A data de contratação é obrigatória.");
         }
 
-        Calendar hoje = Calendar.getInstance();
-        if (funcionario.getData_contratacao().after(hoje)) {
-            throw new IllegalArgumentException("A data de contratação não pode ser futura.");
+        if (funcionario.getChefe() != null) {
+            if (funcionario.getChefe().getId() == null) {
+                throw new IllegalArgumentException("O chefe deve estar cadastrado previamente.");
+            }
+            if (funcionario.getId() != null && funcionario.getChefe().getId().equals(funcionario.getId())) {
+                throw new IllegalArgumentException("Um funcionário não pode ser seu próprio chefe.");
+            }
         }
+    }
 
-        if (funcionario.getChefe() != null && funcionario.getChefe().getId() != null 
-                && funcionario.getChefe().getId().equals(funcionario.getId())) {
-            throw new IllegalArgumentException("Um funcionário não pode ser chefe de si mesmo.");
-        }
+    private boolean emailValido(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return Pattern.compile(regex).matcher(email).matches();
     }
 }
