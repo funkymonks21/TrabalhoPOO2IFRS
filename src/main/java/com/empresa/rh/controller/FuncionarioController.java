@@ -1,61 +1,40 @@
 package com.empresa.rh.controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.empresa.rh.model.Funcionario;
-import com.empresa.rh.model.FuncionarioRepository;
-import io.swagger.v3.oas.annotations.Parameter;
+import com.empresa.rh.model.entity.Funcionario;
+import com.empresa.rh.service.FuncionarioService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/recursoshumanos")
+@RequestMapping("/funcionarios")
 public class FuncionarioController {
+
     @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private FuncionarioService funcionarioService;
 
-    // Método para criar novo funcionario
     @PostMapping
-    public Funcionario criaFuncionario(@RequestBody Funcionario funcionario) {
-    	funcionario.setId(null);
-    	System.out.println(funcionario.toString());
-        return funcionarioRepository.save(funcionario);
+    public Funcionario criar(@RequestBody Funcionario funcionario) {
+        return funcionarioService.criar(funcionario);
     }
 
-    // Método para listar todos as tarefas
     @GetMapping
-    public List<Funcionario> getAllTarefas() {
-        return tarefaRepository.findAll();
+    public List<Funcionario> listar() {
+        return funcionarioService.listar();
     }
 
-    // Método para buscar um tarefa por ID
     @GetMapping("/{id}")
-    public Tarefa getTarefaById(
-        @Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-        @PathVariable("id") Long id) {
-        return tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+    public Funcionario buscarPorId(@PathVariable Long id) {
+        return funcionarioService.buscarPorId(id);
     }
 
-    // Método para atualizar um produto
     @PutMapping("/{id}")
-    public Tarefa updateTarefa(
-    		@PathVariable("id") Long id,
-    		@Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-    		@RequestBody Tarefa tarefaDetails) {
-        Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrado"));
-
-        tarefa.setDescricao(tarefaDetails.getDescricao());
-        tarefa.setFinalizado(tarefaDetails.isFinalizado());
-        tarefa.setDataFinalizacao(tarefaDetails.getDataFinalizacao());
-
-        return tarefaRepository.save(tarefa);
+    public Funcionario atualizar(@PathVariable Long id, @RequestBody Funcionario funcionario) {
+        return funcionarioService.atualizar(id, funcionario);
     }
 
-    // Método para deletar um produto
     @DeleteMapping("/{id}")
-    public void deleteTarefa(
-    		@Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-    		@PathVariable("id") Long id)  {
-        tarefaRepository.deleteById(id);
+    public void excluir(@PathVariable Long id) {
+        funcionarioService.excluir(id);
     }
 }
