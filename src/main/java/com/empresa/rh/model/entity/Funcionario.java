@@ -20,13 +20,16 @@ public class Funcionario {
     private double salario;
     private LocalDate data_admissao;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cargo_id")
     private Cargo cargo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "chefe_id")
     private Funcionario chefe;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "departamento_id")
     private Departamento departamento;
 
     public Long getId() {
@@ -116,3 +119,4 @@ public class Funcionario {
             "]";
     }
 }
+
