@@ -1,61 +1,62 @@
-package com.aprendendoJPAcomSpringBoot.controller;
+package com.exercicioJPAFuncionario.controller;
+
+import com.exercicioJPAFuncionario.entity.Cargo;
+import com.exercicioJPAFuncionario.service.CargoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.aprendendoJPAcomSpringBoot.model.Tarefa;
-import com.aprendendoJPAcomSpringBoot.model.TarefaRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tarefas")
-public class TarefaController {
+@RequestMapping("/cargos")
+public class CargoController {
+
     @Autowired
-    private TarefaRepository tarefaRepository;
+    private CargoService cargoService;
 
-    // Método para criar nova tarefa
+    // Criar novo cargo
     @PostMapping
-    public Tarefa createTarefa(@RequestBody Tarefa tarefa) {
-    	tarefa.setId(null);
-    	System.out.println(tarefa.toString());
-        return tarefaRepository.save(tarefa);
+    public Cargo createCargo(@RequestBody Cargo cargo) {
+        cargo.setId(null);
+        return cargoService.salvar(cargo);
     }
 
-    // Método para listar todos as tarefas
+    // Listar todos os cargos
     @GetMapping
-    public List<Tarefa> getAllTarefas() {
-        return tarefaRepository.findAll();
+    public List<Cargo> getAllCargos() {
+        return cargoService.listarTodos();
     }
 
-    // Método para buscar um tarefa por ID
+    // Buscar cargo por ID
     @GetMapping("/{id}")
-    public Tarefa getTarefaById(
-        @Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-        @PathVariable("id") Long id) {
-        return tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+    public Cargo getCargoById(
+            @Parameter(description = "ID do cargo a ser buscado", required = true, example = "1")
+            @PathVariable("id") Long id) {
+        return cargoService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
     }
 
-    // Método para atualizar um produto
+    // Atualizar cargo
     @PutMapping("/{id}")
-    public Tarefa updateTarefa(
-    		@PathVariable("id") Long id,
-    		@Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-    		@RequestBody Tarefa tarefaDetails) {
-        Tarefa tarefa = tarefaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrado"));
+    public Cargo updateCargo(
+            @PathVariable("id") Long id,
+            @RequestBody Cargo cargoDetails) {
 
-        tarefa.setDescricao(tarefaDetails.getDescricao());
-        tarefa.setFinalizado(tarefaDetails.isFinalizado());
-        tarefa.setDataFinalizacao(tarefaDetails.getDataFinalizacao());
+        Cargo cargo = cargoService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Cargo não encontrado"));
 
-        return tarefaRepository.save(tarefa);
+        cargo.setNome(cargoDetails.getNome());
+        cargo.setDescricao(cargoDetails.getDescricao());
+        cargo.setSalarioBase(cargoDetails.getSalarioBase());
+
+        return cargoService.atualizar(cargo);
     }
 
-    // Método para deletar um produto
+    // Deletar cargo
     @DeleteMapping("/{id}")
-    public void deleteTarefa(
-    		@Parameter(description = "ID of the product to retrieve", required = true, example = "123")
-    		@PathVariable("id") Long id)  {
-        tarefaRepository.deleteById(id);
+    public void deleteCargo(
+            @Parameter(description = "ID do cargo a ser excluído", required = true, example = "1")
+            @PathVariable("id") Long id) {
+        cargoService.excluir(id);
     }
 }
