@@ -1,28 +1,28 @@
-package com.aprendendoJPAcomSpringBoot.controller;
+package com.empresa.rh.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.aprendendoJPAcomSpringBoot.model.Tarefa;
-import com.aprendendoJPAcomSpringBoot.model.TarefaRepository;
+import com.empresa.rh.model.Funcionario;
+import com.empresa.rh.model.FuncionarioRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tarefas")
-public class TarefaController {
+@RequestMapping("/recursoshumanos")
+public class FuncionarioController {
     @Autowired
-    private TarefaRepository tarefaRepository;
+    private FuncionarioRepository funcionarioRepository;
 
-    // Método para criar nova tarefa
+    // Método para criar novo funcionario
     @PostMapping
-    public Tarefa createTarefa(@RequestBody Tarefa tarefa) {
-    	tarefa.setId(null);
-    	System.out.println(tarefa.toString());
-        return tarefaRepository.save(tarefa);
+    public Funcionario criaFuncionario(@RequestBody Funcionario funcionario) {
+    	funcionario.setId(null);
+    	System.out.println(funcionario.toString());
+        return funcionarioRepository.save(funcionario);
     }
 
     // Método para listar todos as tarefas
     @GetMapping
-    public List<Tarefa> getAllTarefas() {
+    public List<Funcionario> getAllTarefas() {
         return tarefaRepository.findAll();
     }
 
