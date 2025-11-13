@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- O título será dinâmico -->
     <title layout:title-pattern="$CONTENT_TITLE - Sistema RH">Página</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-content">
             <a th:href="@{/}" class="navbar-brand">Sistema RH</a>
@@ -20,8 +18,6 @@
             </ul>
         </div>
     </nav>
-
-    <!-- O conteúdo de cada página será inserido aqui -->
     <div class="container" layout:fragment="content">
         <p>Conteúdo da página aqui...</p>
     </div>
