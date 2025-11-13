@@ -1,0 +1,53 @@
+    
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Lista de Cargos</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <!-- Card principal -->
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Gerenciar Cargos</h1>
+            <a th:href="@{/cargos/novo}" class="btn btn-primary">Cadastrar Novo Cargo</a>
+        </div>
+
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th style="width: 150px;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cargo : ${cargos}">
+                        <td th:text="${cargo.id}">1</td>
+                        <td th:text="${cargo.nome}">Analista de Sistemas</td>
+                        <td th:text="${cargo.descricao}">Responsável pelo desenvolvimento...</td>
+                        <td class="table-actions">
+                            <a th:href="@{/cargos/editar/{id}(id=${cargo.id})}" class="btn btn-secondary btn-sm">Editar</a>
+                            <a th:href="@{/cargos/excluir/{id}(id=${cargo.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este cargo?')">Excluir</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(cargos)}">
+                        <td colspan="4" class="text-center">Nenhum cargo cadastrado.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+  
