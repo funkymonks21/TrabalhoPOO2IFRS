@@ -1,0 +1,52 @@
+    
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Lista de Departamentos</title>
+</head>
+<body>
+    <div layout:fragment="content">
+
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Gerenciar Departamentos</h1>
+                <a th:href="@{/departamentos/novo}" class="btn btn-primary">Cadastrar Novo Departamento</a>
+            </div>
+
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th style="width: 150px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="depto : ${departamentos}">
+                            <td th:text="${depto.id}">1</td>
+                            <td th:text="${depto.nome}">Financeiro</td>
+                            <td th:text="${depto.descricao}">Descrição do departamento...</td>
+                            <td class="table-actions">
+                                <a th:href="@{/departamentos/editar/{id}(id=${depto.id})}" class="btn btn-secondary btn-sm">Editar</a>
+                                <a th:href="@{/departamentos/excluir/{id}(id=${depto.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(departamentos)}">
+                            <td colspan="4" class="text-center">Nenhum departamento cadastrado.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+  
