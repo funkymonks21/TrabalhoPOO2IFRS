@@ -1,4 +1,4 @@
-package com.empresa.rh.model.repository;
+package com.empresa.rh.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,11 +1,12 @@
 package com.empresa.rh.controller;
 
 import com.empresa.rh.model.entity.Cargo;
+
 import com.empresa.rh.model.entity.Departamento;
 import com.empresa.rh.model.entity.Funcionario;
 import com.empresa.rh.model.service.FuncionarioService;
-import com.empresa.rh.service.CargoService;
-import com.empresa.rh.service.DepartamentoService;
+import com.empresa.rh.model.service.CargoService;
+import com.empresa.rh.model.service.DepartamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

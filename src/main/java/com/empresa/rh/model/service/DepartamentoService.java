@@ -1,10 +1,11 @@
-package com.empresa.rh.service;
+package com.empresa.rh.model.service;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.empresa.rh.model.entity.Departamento;
-import com.empresa.rh.model.repository.DepartamentoRepository;
+import com.empresa.rh.repository.DepartamentoRepository;
 
 @Service
 public class DepartamentoService {

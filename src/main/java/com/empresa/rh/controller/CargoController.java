@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.empresa.rh.model.entity.Cargo;
-import com.empresa.rh.service.CargoService;
+import com.empresa.rh.model.service.CargoService;
 
 @Controller
 @RequestMapping("/cargos")

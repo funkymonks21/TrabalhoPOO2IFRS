@@ -24,7 +24,7 @@ public class Funcionario {
     @JoinColumn(name = "cargo_id")
     private Cargo cargo;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "chefe_id")
     private Funcionario chefe;
 

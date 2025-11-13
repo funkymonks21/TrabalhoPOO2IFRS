@@ -1,7 +1,8 @@
 package com.empresa.rh.model.service;
 
 import com.empresa.rh.model.entity.Funcionario;
-import com.empresa.rh.model.repository.FuncionarioRepository;
+
+import com.empresa.rh.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -79,13 +80,8 @@ public class FuncionarioService {
             throw new IllegalArgumentException("A data de admissão não pode estar no futuro.");
         }
 
-        if (funcionario.getChefe() != null) {
-            if (funcionario.getChefe().getId() == null) {
-                throw new IllegalArgumentException("O chefe deve estar cadastrado previamente.");
-            }
-            if (funcionario.getId() != null && funcionario.getChefe().getId().equals(funcionario.getId())) {
-                throw new IllegalArgumentException("Um funcionário não pode ser seu próprio chefe.");
-            }
+        if (funcionario.getId() != null && funcionario.getChefe().getId().equals(funcionario.getId())) {
+            throw new IllegalArgumentException("Um funcionário não pode ser seu próprio chefe.");
         }
     }
 

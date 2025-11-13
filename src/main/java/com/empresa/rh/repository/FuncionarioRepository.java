@@ -1,4 +1,4 @@
-package com.empresa.rh.model.repository;
+package com.empresa.rh.repository;
 
 import com.empresa.rh.model.entity.Funcionario;
 import org.springframework.data.jpa.repository.JpaRepository;
