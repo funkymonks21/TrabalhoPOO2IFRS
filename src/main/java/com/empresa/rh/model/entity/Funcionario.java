@@ -1,6 +1,8 @@
 package com.empresa.rh.model.entity;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -18,8 +20,11 @@ public class Funcionario {
 
     private String email;
     private double salario;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) //Manter data durante edição
     private LocalDate data_admissao;
 
+    //@ManyToOne = 
+    //@JoinColumn = 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "cargo_id")
     private Cargo cargo;
