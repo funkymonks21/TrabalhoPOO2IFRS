@@ -16,9 +16,8 @@ public class FuncionarioService {
     private FuncionarioRepository funcionarioRepository;
 
     public Funcionario criar(Funcionario funcionario) {
-
+    	// recebe o objeto criado anteriormente e dá um id a ele. Depois chama a função de validação de dados
         funcionario.setId(null);
-
         validarFuncionario(funcionario);
 
         if (funcionario.getChefe() != null && funcionario.getChefe().getId() != null) {
@@ -40,21 +39,15 @@ public class FuncionarioService {
     }
 
     public Funcionario atualizar(Long id, Funcionario funcionarioAtualizado) {
-
         Funcionario funcionarioExistente = buscarPorId(id);
-
         funcionarioAtualizado.setId(id);
-
         validarFuncionario(funcionarioAtualizado);
-
 
         Funcionario novoChefe = null;
         if (funcionarioAtualizado.getChefe() != null && funcionarioAtualizado.getChefe().getId() != null) {
             novoChefe = funcionarioRepository.findById(funcionarioAtualizado.getChefe().getId())
                     .orElseThrow(() -> new IllegalArgumentException("Chefe não encontrado."));
         }
-
-
         if (novoChefe != null) {
             validarChefe(funcionarioExistente, novoChefe);
         }
@@ -67,15 +60,19 @@ public class FuncionarioService {
     }
 
     private void validarFuncionario(Funcionario funcionario) {
-
+    	// validação de nome. não pode ser nulo ou vazio
         if (funcionario.getNome() == null || funcionario.getNome().isBlank()) {
             throw new IllegalArgumentException("O nome do funcionário é obrigatório.");
         }
-
+        // cpf não pode ser nulo, vazio, ou não ter 11 caracteres, replaceall para limpar o cpf
         if (funcionario.getCpf() == null || funcionario.getCpf().isBlank()) {
             throw new IllegalArgumentException("O CPF é obrigatório.");
         }
-
+        String cpfApenasNumeros = funcionario.getCpf().replaceAll("[^0-9]", "");
+        if (cpfApenasNumeros.length() != 11) {
+            throw new IllegalArgumentException("O CPF deve conter exatamente 11 dígitos.");
+        }
+        funcionario.setCpf(cpfApenasNumeros);
 
         if (funcionarioRepository.existsByCpf(funcionario.getCpf())) {
             Funcionario existente = funcionarioRepository.findByCpf(funcionario.getCpf());
@@ -125,15 +122,9 @@ public class FuncionarioService {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return Pattern.compile(regex).matcher(email).matches();
     }
-//validações de chefe
+    //validações de chefe
     private void validarChefe(Funcionario funcionario, Funcionario novoChefe) {
-
-        // Regra 1 — não pode ser chefe de si mesmo
-        if (funcionario.getId().equals(novoChefe.getId())) {
-            throw new IllegalArgumentException("Um funcionário não pode ser chefe dele mesmo.");
-        }
-
-        // Regra 2 — prevenir ciclos hierárquicos
+        // prevenir ciclos hierárquicos
         Funcionario atual = novoChefe;
         while (atual != null) {
             if (atual.getId().equals(funcionario.getId())) {

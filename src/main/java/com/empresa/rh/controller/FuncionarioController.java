@@ -63,7 +63,7 @@ public class FuncionarioController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@ModelAttribute("funcionario") Funcionario funcionario, RedirectAttributes ra) {
+    public String salvar(@ModelAttribute("funcionario") Funcionario funcionario, RedirectAttributes ra, Model model) {
         try {
             if (funcionario.getId() == null) {
                 funcionarioService.criar(funcionario);
@@ -72,11 +72,23 @@ public class FuncionarioController {
                 funcionarioService.atualizar(funcionario.getId(), funcionario);
                 ra.addFlashAttribute("message", "Funcionário atualizado com sucesso!");
             }
+            return "redirect:/funcionarios"; 
+
         } catch (IllegalArgumentException e) {
-            ra.addFlashAttribute("error", "Erro: " + e.getMessage());
-            return funcionario.getId() == null ? "redirect:/funcionarios/novo" : "redirect:/funcionarios/editar/" + funcionario.getId();
+            model.addAttribute("error", "Erro: " + e.getMessage());
+            model.addAttribute("funcionario", funcionario); 
+            if (funcionario.getId() != null) {
+                List<Funcionario> chefesPotenciais = funcionarioService.listar().stream()
+                        .filter(f -> !f.getId().equals(funcionario.getId()))
+                        .collect(Collectors.toList());
+                model.addAttribute("chefes", chefesPotenciais);
+                model.addAttribute("pageTitle", "Editar Funcionário");
+            } else {
+                model.addAttribute("chefes", funcionarioService.listar());
+                model.addAttribute("pageTitle", "Cadastrar Novo Funcionário");
+            }
+            return "funcionarios/formulario";
         }
-        return "redirect:/funcionarios";
     }
 
     @GetMapping("/editar/{id}")

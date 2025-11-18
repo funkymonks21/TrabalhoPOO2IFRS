@@ -23,7 +23,7 @@ public class Funcionario {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) //Manter data durante edição
     private LocalDate data_admissao;
 
-    //@ManyToOne = 
+    //@ManyToOne = o func precisa de um cargo e vários podem ter o mesmo cargo
     //@JoinColumn = 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "cargo_id")

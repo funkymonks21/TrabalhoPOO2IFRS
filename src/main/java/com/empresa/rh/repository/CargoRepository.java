@@ -7,4 +7,5 @@ import com.empresa.rh.model.entity.Cargo;
 @Repository
 public interface CargoRepository extends JpaRepository<Cargo, Long> {
     boolean existsByNome(String nome);
+    
 }

@@ -12,6 +12,10 @@
         <div class="card-header">
             <h1 class="card-title" th:text="${pageTitle}">Cadastrar Funcionário</h1>
         </div>
+		
+		<div th:if="${error}" class="alert alert-danger" th:text="${error}" style="margin: 0 1.5rem 1.5rem 1.5rem;">
+		       Mensagem de erro aparecerá aqui.
+		   </div>
 
         <form th:action="@{/funcionarios/salvar}" th:object="${funcionario}" method="post">
             <input type="hidden" th:field="*{id}" />
