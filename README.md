@@ -1,7 +1,7 @@
 # Instruções para Teste
 
 Importe o repositório para a sua IDE. 
-Crie um banco de dados chamado "empresa-rh" no seu banco de dados local, utilizei o mysql para o teste.
+Crie um banco de dados chamado "empresa_rh" no seu banco de dados local, utilizei o mysql para o teste.
 
 Rode a aplicação a partir da classe RhSpringbootApplication.java
 
